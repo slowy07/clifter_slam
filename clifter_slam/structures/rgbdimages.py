@@ -13,6 +13,7 @@ __all__ = ["RGBDImages"]
 class RGBDImages(object):
     r"""Initializes an RGBDImage object consisting of a batch of a sequence of rgb images, depth maps,
     camera intrinsics, and (optionally) poses.
+
     Args:
         rgb_image (torch.Tensor): 3-channel rgb image
         depth_image (torch.Tensor): 1-channel depth map
@@ -25,13 +26,16 @@ class RGBDImages(object):
             same as `rgb_image` device. Default: None
         pixel_pos (torch.Tensor or None): Similar to meshgrid but with extra channel of 1s at the end. If provided,
             can save computations when computing vertex maps. Default: None
+
     Shape:
         - rgb_image: :math:`(B, L, H, W, 3)` if `channels_first` is False, else :math:`(B, L, 3, H, W)`
         - depth_image: :math:`(B, L, H, W, 1)` if `channels_first` is False, else :math:`(B, L, 1, H, W)`
         - intrinsics: :math:`(B, 1, 4, 4)`
         - poses: :math:`(B, L, 4, 4)`
         - pixel_pos: :math:`(B, L, H, W, 3)` if `channels_first` is False, else :math:`(B, L, 3, H, W)`
+
     Examples::
+
         >>> colors = torch.rand([2, 8, 32, 32, 3])
         >>> depths = torch.rand([2, 8, 32, 32, 1])
         >>> intrinsics = torch.rand([2, 1, 4, 4])
@@ -183,6 +187,7 @@ class RGBDImages(object):
         Args:
             index (int or slice or list of int): Specifying the index of the rgbdimages to retrieve.
                 Can be an int, slice, list of ints or a boolean tensor.
+
         Returns:
             clifter_slam.RGBDImages: Selected rgbdimages. The rgbdimages tensors are not cloned.
         """
@@ -236,6 +241,7 @@ class RGBDImages(object):
     @property
     def channels_first(self):
         r"""Gets bool indicating whether RGBDImages representation is channels first or not
+
         Returns:
             bool: True if RGBDImages representation is channels first, else False.
         """
@@ -244,6 +250,7 @@ class RGBDImages(object):
     @property
     def cdim(self):
         r"""Gets the channel dimension
+
         Returns:
             int: :math:`2` if self.channels_first is True, else :math:`4`.
         """
@@ -252,8 +259,10 @@ class RGBDImages(object):
     @property
     def rgb_image(self):
         r"""Gets the rgb image
+
         Returns:
             torch.Tensor: tensor representation of `rgb_image`
+
         Shape:
             - Output: :math:`(B, L, H, W, 3)` if self.channels_first is False, else :math:`(B, L, 3, H, W)`
         """
@@ -262,8 +271,10 @@ class RGBDImages(object):
     @property
     def depth_image(self):
         r"""Gets the depth image
+
         Returns:
             torch.Tensor: tensor representation of `depth_image`
+
         Shape:
             - Output: :math:`(B, L, H, W, 1)` if self.channels_first is False, else :math:`(B, L, 1, H, W)`
         """
@@ -272,8 +283,10 @@ class RGBDImages(object):
     @property
     def intrinsics(self):
         r"""Gets the `intrinsics`
+
         Returns:
             torch.Tensor: tensor representation of `intrinsics`
+
         Shape:
             - Output: :math:`(B, 1, 4, 4)`
         """
@@ -282,8 +295,10 @@ class RGBDImages(object):
     @property
     def poses(self):
         r"""Gets the `poses`
+
         Returns:
             torch.Tensor: tensor representation of `poses`
+
         Shape:
             - Output: :math:`(B, L, 4, 4)`
         """
@@ -292,8 +307,10 @@ class RGBDImages(object):
     @property
     def pixel_pos(self):
         r"""Gets the `pixel_pos`
+
         Returns:
             torch.Tensor: tensor representation of `pixel_pos`
+
         Shape:
             - Output: :math:`(B, L, H, W, 3)` if self.channels_first is False, else :math:`(B, L, 3, H, W)`
         """
@@ -302,9 +319,11 @@ class RGBDImages(object):
     @property
     def valid_depth_mask(self):
         r"""Gets a mask which is True wherever `self.dept_image` is :math:`>0`
+
         Returns:
             torch.Tensor: Tensor of dtype bool with same shape as `self.depth_image`. Tensor is True wherever
             `self.depth_image` > 0, and False otherwise.
+
         Shape:
             - Output: :math:`(B, L, H, W, 1)` if self.channels_first is False, else :math:`(B, L, 1, H, W)`
         """
@@ -315,6 +334,7 @@ class RGBDImages(object):
     @property
     def has_poses(self):
         r"""Determines whether self has `poses` or not
+
         Returns:
             bool
         """
@@ -323,8 +343,10 @@ class RGBDImages(object):
     @property
     def vertex_map(self):
         r"""Gets the local vertex maps
+
         Returns:
             torch.Tensor: tensor representation of local coordinated vertex maps
+
         Shape:
             - Output: :math:`(B, L, H, W, 3)` if self.channels_first is False, else :math:`(B, L, 3, H, W)`
         """
@@ -335,8 +357,10 @@ class RGBDImages(object):
     @property
     def normal_map(self):
         r"""Gets the local normal maps
+
         Returns:
             torch.Tensor: tensor representation of local coordinated normal maps
+
         Shape:
             - Output: :math:`(B, L, H, W, 3)` if self.channels_first is False, else :math:`(B, L, 3, H, W)`
         """
@@ -347,8 +371,10 @@ class RGBDImages(object):
     @property
     def global_vertex_map(self):
         r"""Gets the global vertex maps
+
         Returns:
             torch.Tensor: tensor representation of global coordinated vertex maps
+
         Shape:
             - Output: :math:`(B, L, H, W, 3)` if self.channels_first is False, else :math:`(B, L, 3, H, W)`
         """
@@ -359,8 +385,10 @@ class RGBDImages(object):
     @property
     def global_normal_map(self):
         r"""Gets the global normal maps
+
         Returns:
             torch.Tensor: tensor representation of global coordinated normal maps
+
         Shape:
             - Output: :math:`(B, L, H, W, 3)` if self.channels_first is False, else :math:`(B, L, 3, H, W)`
         """
@@ -371,8 +399,10 @@ class RGBDImages(object):
     @rgb_image.setter
     def rgb_image(self, value):
         r"""Updates `rgb_image` of self.
+
         Args:
             value (torch.Tensor): New rgb image values
+
         Shape:
             - value: :math:`(B, L, H, W, 3)` if self.channels_first is False, else :math:`(B, L, 3, H, W)`
         """
@@ -383,8 +413,10 @@ class RGBDImages(object):
     @depth_image.setter
     def depth_image(self, value):
         r"""Updates `depth_image` of self.
+
         Args:
             value (torch.Tensor): New depth image values
+
         Shape:
             - value: :math:`(B, L, H, W, 1)` if self.channels_first is False, else :math:`(B, L, 1, H, W)`
         """
@@ -399,8 +431,10 @@ class RGBDImages(object):
     @intrinsics.setter
     def intrinsics(self, value):
         r"""Updates `intrinsics` of self.
+
         Args:
             value (torch.Tensor): New intrinsics values
+
         Shape:
             - value: :math:`(B, 1, 4, 4)`
         """
@@ -415,8 +449,10 @@ class RGBDImages(object):
     @poses.setter
     def poses(self, value):
         r"""Updates `poses` of self.
+
         Args:
             value (torch.Tensor): New pose values
+
         Shape:
             - value: :math:`(B, L, 4, 4)`
         """
@@ -428,6 +464,7 @@ class RGBDImages(object):
 
     def detach(self):
         r"""Detachs RGBDImages object. All internal tensors are detached individually.
+
         Returns:
             clifter_slam.RGBDImages: detached clifter_slam.RGBDImages object
         """
@@ -441,6 +478,7 @@ class RGBDImages(object):
 
     def clone(self):
         r"""Returns deep copy of RGBDImages object. All internal tensors are cloned individually.
+
         Returns:
             clifter_slam.RGBDImages: cloned clifter_slam.RGBDImages object
         """
@@ -463,9 +501,11 @@ class RGBDImages(object):
         If copy = True or the self Tensor is on a different device, the returned tensor is a copy of self with the
         desired torch.device.
         If copy = False and the self Tensor already has the correct torch.device, then self is returned.
+
         Args:
             device (torch.device or str): Device id for the new tensor.
             copy (bool): Boolean indicator whether or not to clone self. Default False.
+
         Returns:
             clifter_slam.RGBDImages
         """
@@ -486,6 +526,7 @@ class RGBDImages(object):
 
     def cpu(self):
         r"""Match functionality of torch.Tensor.cpu()
+
         Returns:
             clifter_slam.RGBDImages
         """
@@ -493,6 +534,7 @@ class RGBDImages(object):
 
     def cuda(self):
         r"""Match functionality of torch.Tensor.cuda()
+
         Returns:
             clifter_slam.RGBDImages
         """
@@ -503,8 +545,10 @@ class RGBDImages(object):
         If copy = True or self channels_first is True, the returned RGBDImages object is a copy of self with
         channels last representation.
         If copy = False and self channels_first is already False, then self is returned.
+
         Args:
             copy (bool): Boolean indicator whether or not to clone self. Default False.
+
         Returns:
             clifter_slam.RGBDImages
         """
@@ -517,8 +561,10 @@ class RGBDImages(object):
         If copy = True or self channels_first is False, the returned RGBDImages object is a copy of self with
         channels first representation.
         If copy = False and self channels_first is already True, then self is returned.
+
         Args:
             copy (bool): Boolean indicator whether or not to clone self. Default False.
+
         Returns:
             clifter_slam.RGBDImages
         """
@@ -528,6 +574,7 @@ class RGBDImages(object):
 
     def to_channels_last_(self):
         r"""Converts to channels last representation. In place operation.
+
         Returns:
             clifter_slam.RGBDImages
         """
@@ -549,6 +596,7 @@ class RGBDImages(object):
 
     def to_channels_first_(self):
         r"""Converts to channels first representation. In place operation.
+
         Returns:
             clifter_slam.RGBDImages
         """
@@ -573,11 +621,13 @@ class RGBDImages(object):
         tensor: Optional[torch.Tensor], ordering: tuple, contiguous: bool = True
     ):
         r"""Permutes input if it is not None based on given ordering
+
         Args:
             tensor (torch.Tensor or None): Tensor to be permuted, or None
             ordering (tuple): The desired ordering of dimensions
             contiguous (bool): Whether to call `.contiguous()` on permuted tensor before returning.
                 Default: True
+
         Returns:
             torch.Tensor or None: Permuted tensor or None
         """
@@ -720,14 +770,19 @@ class RGBDImages(object):
     ):
         r"""Converts `index`-th sequence of rgbd images to either a `plotly.graph_objects.Figure` or a
         list of dicts containing `plotly.graph_objects.Image` objects of rgb and (optionally) depth images:
+
         .. code-block:: python
+
+
             frames = [
                 {'name': 0, 'data': [rgbImage0, depthImage0], 'traces': [0, 1]},
                 {'name': 1, 'data': [rgbImage1, depthImage1], 'traces': [0, 1]},
                 {'name': 2, 'data': [rgbImage2, depthImage2], 'traces': [0, 1]},
                 ...
             ]
+
         Returned `frames` can be passed to `go.Figure(frames=frames)`.
+
         Args:
             index (int): Index of which rgbd image (from the batch of rgbd images) to convert to plotly
                 representation.
@@ -737,6 +792,7 @@ class RGBDImages(object):
                 which can be passed to `go.Figure(frames=frames)`. Default: True
             ms_per_frame (int): Milliseconds per frame when play button is hit. Only applicable if `as_figure=True`.
                 Default: 50
+
         Returns:
             plotly.graph_objects.Figure or list of dict: If `as_figure` is True, will return
             `plotly.graph_objects.Figure` object from the `index`-th sequence of rgbd images. Else,
@@ -847,6 +903,7 @@ class RGBDImages(object):
 
     def _assert_shape(self, value: torch.Tensor, shape: tuple):
         r"""Asserts if value is a tensor with same shape as `shape`
+
         Args:
             value (torch.Tensor): Tensor to check shape of
             shape (tuple): Expected shape of value

@@ -20,8 +20,10 @@ def normalize_image(rgb: Union[torch.Tensor, np.ndarray]):
     r"""Normalizes RGB image values from :math:`[0, 255]` range to :math:`[0, 1]` range.
     Args:
         rgb (torch.Tensor or numpy.ndarray): RGB image in range :math:`[0, 255]`
+
     Returns:
         torch.Tensor or numpy.ndarray: Normalized RGB image in range :math:`[0, 1]`
+
     Shape:
         - rgb: :math:`(*)` (any shape)
         - Output: Same shape as input :math:`(*)`
@@ -37,10 +39,14 @@ def normalize_image(rgb: Union[torch.Tensor, np.ndarray]):
 def channels_first(rgb: Union[torch.Tensor, np.ndarray]):
     r"""Converts from channels last representation :math:`(*, H, W, C)` to channels first representation
     :math:`(*, C, H, W)`
+
     Args:
         rgb (torch.Tensor or numpy.ndarray): :math:`(*, H, W, C)` ordering `(*, height, width, channels)`
+
     Returns:
         torch.Tensor or numpy.ndarray: :math:`(*, C, H, W)` ordering
+
+
     Shape:
         - rgb: :math:`(*, H, W, C)`
         - Output: :math:`(*, C, H, W)`
@@ -71,14 +77,17 @@ def scale_intrinsics(
 ):
     r"""Scales the intrinsics appropriately for resized frames where
     :math:`h_\text{ratio} = h_\text{new} / h_\text{old}` and :math:`w_\text{ratio} = w_\text{new} / w_\text{old}`
+
     Args:
         intrinsics (numpy.ndarray or torch.Tensor): Intrinsics matrix of original frame
         h_ratio (float or int): Ratio of new frame's height to old frame's height
             :math:`h_\text{ratio} = h_\text{new} / h_\text{old}`
         w_ratio (float or int): Ratio of new frame's width to old frame's width
             :math:`w_\text{ratio} = w_\text{new} / w_\text{old}`
+
     Returns:
         numpy.ndarray or torch.Tensor: Intrinsics matrix scaled approprately for new frame size
+
     Shape:
         - intrinsics: :math:`(*, 3, 3)` or :math:`(*, 4, 4)`
         - Output: Matches `intrinsics` shape, :math:`(*, 3, 3)` or :math:`(*, 4, 4)`
@@ -113,23 +122,29 @@ def pointquaternion_to_homogeneous(
     r"""Converts 3D point and unit quaternions :math:`(t_x, t_y, t_z, q_x, q_y, q_z, q_w)` to
     homogeneous transformations [R | t] where :math:`R` denotes the :math:`(3, 3)` rotation matrix and :math:`T`
     denotes the :math:`(3, 1)` translation matrix:
+
     .. math::
+
         \left[\begin{array}{@{}c:c@{}}
         R & T \\ \hdashline
         \begin{array}{@{}ccc@{}}
             0 & 0 & 0
         \end{array}  & 1
         \end{array}\right]
+
     Args:
         pointquaternions (numpy.ndarray or torch.Tensor): 3D point positions and unit quaternions
             :math:`(tx, ty, tz, qx, qy, qz, qw)` where :math:`(tx, ty, tz)` is the 3D position and
             :math:`(qx, qy, qz, qw)` is the unit quaternion.
         eps (float): Small value, to avoid division by zero. Default: 1e-12
+
     Returns:
         numpy.ndarray or torch.Tensor: Homogeneous transformation matrices.
+
     Shape:
         - pointquaternions: :math:`(*, 7)`
         - Output: :math:`(*, 4, 4)`
+
     """
     if not (
         isinstance(pointquaternions, np.ndarray) or torch.is_tensor(pointquaternions)
@@ -201,11 +216,14 @@ def pointquaternion_to_homogeneous(
 
 def poses_to_transforms(poses: Union[np.ndarray, List[np.ndarray]]):
     r"""Converts poses to transformations w.r.t. the first frame in the sequence having identity pose
+
     Args:
         poses (numpy.ndarray or list of numpy.ndarray): Sequence of poses in `numpy.ndarray` format.
+
     Returns:
         numpy.ndarray or list of numpy.ndarray: Sequence of frame to frame transformations where initial
             frame is transformed to have identity pose.
+
     Shape:
         - poses: Could be `numpy.ndarray` of shape :math:`(N, 4, 4)`, or list of `numpy.ndarray`s of shape
           :math:`(4, 4)`
@@ -222,12 +240,15 @@ def poses_to_transforms(poses: Union[np.ndarray, List[np.ndarray]]):
 
 def create_label_image(prediction: np.ndarray, color_palette: OrderedDict):
     r"""Creates a label image, given a network prediction (each pixel contains class index) and a color palette.
+
     Args:
         prediction (numpy.ndarray): Predicted image where each pixel contains an integer,
             corresponding to its class label.
         color_palette (OrderedDict): Contains RGB colors (`uint8`) for each class.
+
     Returns:
         numpy.ndarray: Label image with the given color palette
+
     Shape:
         - prediction: :math:`(H, W)`
         - Output: :math:`(H, W)`

@@ -38,9 +38,9 @@ class GradICPOdometryProvider(OdometryProvider):
                 Default: None
             lambda_max (float or int): Maximum value the damping function can assume (`lambda_min` will be
                 :math:`\frac{1}{\text{lambda_max}}`)
-            B (float or int): clifterLM falloff control parameter (see GradICPOdometryProvider description)
-            B2 (float or int): clifterLM control parameter (see GradICPOdometryProvider description)
-            nu (float or int): clifterLM control parameter (see GradICPOdometryProvider description)
+            B (float or int): gradLM falloff control parameter (see GradICPOdometryProvider description)
+            B2 (float or int): gradLM control parameter (see GradICPOdometryProvider description)
+            nu (float or int): gradLM control parameter (see GradICPOdometryProvider description)
         """
         self.numiters = numiters
         self.damp = damp
@@ -62,8 +62,10 @@ class GradICPOdometryProvider(OdometryProvider):
                 :math:`(B)`
             frames_pointclouds (clifter_slam.Pointclouds): Object containing batch of live frame pointclouds of batch size
                 :math:`(B)`
+
         Returns:
             torch.Tensor: The relative transformation that would align `maps_pointclouds` with `frames_pointclouds`
+
         Shape:
             - Output: :math:`(B, 1, 4, 4)`
         """

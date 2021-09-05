@@ -1,3 +1,7 @@
+"""
+Operations over the Lie Group SE(3), for rigid-body transformations in 3D
+"""
+
 import torch
 
 # Threshold to determine if a quantity can be considered 'small'
@@ -7,6 +11,7 @@ _eps = 1e-6
 def so3_hat(omega: torch.Tensor) -> torch.Tensor:
     """Implements the hat operator for SO(3), given an input axis-angle
     vector omega.
+
     """
     assert torch.is_tensor(omega), "Input must be of type torch.tensor."
 
@@ -42,6 +47,7 @@ def se3_hat(xi: torch.Tensor) -> torch.Tensor:
 def so3_exp(omega: torch.Tensor) -> torch.Tensor:
     """Computes the exponential map for the coordinate-vector omega.
     Returns a 3 x 3 SO(3) matrix.
+
     """
 
     assert torch.is_tensor(omega), "Input must be of type torch.Tensor."
@@ -71,6 +77,7 @@ def so3_exp(omega: torch.Tensor) -> torch.Tensor:
 def se3_exp(xi: torch.Tensor) -> torch.Tensor:
     """Computes the exponential map for the coordinate-vector xi.
     Returns a 4 x 4 SE(3) matrix.
+
     """
 
     assert torch.is_tensor(xi), "Input must be of type torch.tensor."

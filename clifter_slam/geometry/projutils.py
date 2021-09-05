@@ -1,3 +1,7 @@
+"""
+Projective geometry utility functions.
+"""
+
 from typing import Optional
 
 import torch
@@ -5,16 +9,21 @@ import torch
 
 def homogenize_points(pts: torch.Tensor):
     r"""Convert a set of points to homogeneous coordinates.
+
     Args:
         pts (torch.Tensor): Tensor containing points to be homogenized.
+
     Returns:
         torch.Tensor: Homogeneous coordinates of pts.
+
     Shape:
         - pts: :math:`(N, *, K)` where :math:`N` indicates the number of points in a cloud if
           the shape is :math:`(N, K)` and indicates batchsize if the number of dimensions is greater than 2.
           Also, :math:`*` means any number of additional dimensions, and `K` is the dimensionality of each point.
         - Output: :math:`(N, *, K + 1)` where all but the last dimension are the same shape as `pts`.
+
     Examples::
+
         >>> pts = torch.rand(10, 3)
         >>> pts_homo = homogenize_points(pts)
         >>> pts_homo.shape
@@ -38,16 +47,21 @@ def unhomogenize_points(pts: torch.Tensor, eps: float = 1e-6) -> torch.Tensor:
     r"""Convert a set of points from homogeneous coordinates to Euclidean
     coordinates. This is usually done by taking each point :math:`(X, Y, Z, W)` and dividing it by
     the last coordinate :math:`(w)`.
+
     Args:
         pts (torch.Tensor): Tensor containing points to be unhomogenized.
+
     Returns:
         torch.Tensor: 'Unhomogenized' points
+
     Shape:
         - pts: :math:`(N, *, K)` where :math:`N` indicates the number of points in a cloud if
           the shape is :math:`(N, K)` and indicates batchsize if the number of dimensions is greater than 2.
           Also, :math:`*` means any number of additional dimensions, and `K` is the dimensionality of each point.
         - output: :math:`(N, *, K-1)` where all but the last dimension are the same shape as `pts`.
+
     Examples::
+
         >>> pts = torch.rand(10, 3)
         >>> pts_unhomo = unhomogenize_points(pts)
         >>> pts_unhomo.shape
@@ -79,13 +93,16 @@ def project_points(
     cam_coords: torch.Tensor, proj_mat: torch.Tensor, eps: Optional[float] = 1e-6
 ) -> torch.Tensor:
     r"""Projects points from the camera coordinate frame to the image (pixel) frame.
+
     Args:
         cam_coords (torch.Tensor): pixel coordinates (defined in the
             frame of the first camera).
         proj_mat (torch.Tensor): projection matrix between the reference
             and the non-reference camera frame.
+
     Returns:
         torch.Tensor: Image (pixel) coordinates corresponding to the input 3D points.
+
     Shapes:
         - cam_coords: :math:`(N, *, 3)` or :math:`(*, 4)` where :math:`*` indicates an arbitrary number of dimensions.
           Here :math:`N` indicates the number of points in a cloud if the shape is :math:`(N, 3)` and indicates
@@ -95,7 +112,9 @@ def project_points(
         - Output: :math:`(N, *, 2)`, where :math:`*` indicates the same dimensions as in `cam_coords`.
           Here :math:`N` indicates the number of points in a cloud if the shape is :math:`(N, 3)` and indicates
           batchsize if the number of dimensions is greater than 2.
+
     Examples::
+
         >>> # Case 1: Input cam_coords are homogeneous, no batchsize dimension.
         >>> cam_coords = torch.rand(10, 4)
         >>> proj_mat = torch.rand(4, 4)
@@ -223,12 +242,15 @@ def unproject_points(
     pixel_coords: torch.Tensor, intrinsics_inv: torch.Tensor, depths: torch.Tensor
 ) -> torch.Tensor:
     r"""Unprojects points from the image (pixel) frame to the camera coordinate frame.
+
     Args:
         pixel_coords (torch.Tensor): pixel coordinates.
         intrinsics_inv (torch.Tensor): inverse of the camera intrinsics matrix.
         depths (torch.Tensor): per-pixel depth estimates.
+
     Returns:
         torch.Tensor: camera coordinates
+
     Shapes:
         - pixel_coords: :math:`(N, *, 2)` or :math:`(*, 3)`, where * indicates an arbitrary number of dimensions.
           Here :math:`N` indicates the number of points in a cloud if the shape is :math:`(N, 3)` and indicates
@@ -240,7 +262,9 @@ def unproject_points(
         - output: :math:`(N, *, 3)` where * indicates the same number of dimensions as in `pixel_coords`.
           Here :math:`N` indicates the number of points in a cloud if the shape is :math:`(N, 3)` and indicates
           batchsize if the number of dimensions is greater than 2.
+
     Examples::
+
         >>> # Case 1: Input pixel_coords are homogeneous, no batchsize dimension.
         >>> pixel_coords = torch.rand(10, 3)
         >>> intrinsics_inv = torch.rand(3, 3)
@@ -380,11 +404,14 @@ def unproject_points(
 
 def inverse_intrinsics(K: torch.Tensor, eps: float = 1e-6) -> torch.Tensor:
     r"""Efficient inversion of intrinsics matrix
+
     Args:
         K (torch.Tensor): Intrinsics matrix
         eps (float): Epsilon for numerical stability
+
     Returns:
         torch.Tensor: Inverse of intrinsics matrices
+
     Shape:
         - K: :math:`(*, 4, 4)` or :math:`(*, 3, 3)`
         - Kinv: Matches shape of `K` (:math:`(*, 4, 4)` or :math:`(*, 3, 3)`)

@@ -20,7 +20,10 @@ class TUM(data.Dataset):
     (with first frame's pose as the reference transformation), names of frames. Uses extracted `.tgz` sequences
     downloaded from `here <https://vision.in.tum.de/data/datasets/rgbd-dataset/download>`__.
     Expects similar to the following folder structure for the TUM dataset:
+
     .. code-block::
+
+
         | ├── TUM
         | │   ├── rgbd_dataset_freiburg1_rpy
         | │   │   ├── depth/
@@ -39,8 +42,12 @@ class TUM(data.Dataset):
         | │   ├── ...
         |
         |
+
     Example of sequence creation from frames with `seqlen=4`, `dilation=1`, `stride=3`, and `start=2`:
+
     .. code-block::
+
+
                                             sequence0
                         ┎───────────────┲───────────────┲───────────────┒
                         |               |               |               |
@@ -48,11 +55,15 @@ class TUM(data.Dataset):
                                                 |               |               |                |
                                                 └───────────────┵───────────────┵────────────────┚
                                                                     sequence1
+
     Args:
         basedir (str): Path to the base directory containing extracted TUM sequences in separate directories.
             Each sequence subdirectory is assumed to contain `depth/`, `rgb/`, `accelerometer.txt`, `depth.txt` and
             `groundtruth.txt` and `rgb.txt`, E.g.:
+
             .. code-block::
+
+
                 ├── rgbd_dataset_freiburgX_NAME
                 │   ├── depth/
                 │   ├── rgb/
@@ -60,6 +71,7 @@ class TUM(data.Dataset):
                 │   ├── depth.txt
                 │   ├── groundtruth.txt
                 │   └── rgb.txt
+
         sequences (str or tuple of str or None): Sequences to use from those available in `basedir`.
             Can be path to a `.txt` file where each line is a sequence name (e.g. `rgbd_dataset_freiburg1_rpy`),
             a tuple of sequence names, or None to use all sequences. Default: None
@@ -88,12 +100,16 @@ class TUM(data.Dataset):
             identity. Default: True
         return_names (bool): Determines whether to return sequence names. Default: True
         return_timestamps (bool): Determines whether to return rgb, depth and pose timestamps. Default: True
+
+
     Examples::
+
         >>> dataset = TUM(
             basedir="TUM-data/",
             sequences=("rgbd_dataset_freiburg1_rpy", "rgbd_dataset_freiburg1_xyz"))
         >>> loader = data.DataLoader(dataset=dataset, batch_size=4)
         >>> colors, depths, intrinsics, poses, transforms, names = next(iter(loader))
+
     """
 
     def __init__(
@@ -335,6 +351,7 @@ class TUM(data.Dataset):
 
     def __getitem__(self, idx: int):
         r"""Returns the data from the sequence at index idx.
+
         Returns:
             color_seq (torch.Tensor): Sequence of rgb images of each frame
             depth_seq (torch.Tensor): Sequence of depths of each frame
@@ -347,6 +364,7 @@ class TUM(data.Dataset):
             framename (str): Name of the frame
             timestamp_seq (str): Sequence of timestamps of matched rgb, depth and pose stored
                 as "rgb rgb_timestamp depth depth_timestamp pose pose_timestamp\n".
+
         Shape:
             - color_seq: :math:`(L, H, W, 3)` if `channels_first` is False, else :math:`(L, 3, H, W)`. `L` denotes
                 sequence length.
@@ -418,10 +436,13 @@ class TUM(data.Dataset):
     def _preprocess_color(self, color: np.ndarray):
         r"""Preprocesses the color image by resizing to :math:`(H, W, C)`, (optionally) normalizing values to
         :math:`[0, 1]`, and (optionally) using channels first :math:`(C, H, W)` representation.
+
         Args:
             color (np.ndarray): Raw input rgb image
+
         Retruns:
             np.ndarray: Preprocessed rgb image
+
         Shape:
             - Input: :math:`(H_\text{old}, W_\text{old}, C)`
             - Output: :math:`(H, W, C)` if `self.channels_first == False`, else :math:`(C, H, W)`.
@@ -438,10 +459,13 @@ class TUM(data.Dataset):
     def _preprocess_depth(self, depth: np.ndarray):
         r"""Preprocesses the depth image by resizing, adding channel dimension, and scaling values to meters. Optionally
         converts depth from channels last :math:`(H, W, 1)` to channels first :math:`(1, H, W)` representation.
+
         Args:
             depth (np.ndarray): Raw depth image
+
         Returns:
             np.ndarray: Preprocessed depth
+
         Shape:
             - depth: :math:`(H_\text{old}, W_\text{old})`
             - Output: :math:`(H, W, 1)` if `self.channels_first == False`, else :math:`(1, H, W)`.
@@ -459,10 +483,13 @@ class TUM(data.Dataset):
     def _preprocess_poses(self, poses: torch.Tensor):
         r"""Preprocesses the poses by setting first pose in a sequence to identity and computing the relative
         homogenous transformation for all other poses.
+
         Args:
             poses (torch.Tensor): Pose matrices to be preprocessed
+
         Returns:
             Output (torch.Tensor): Preprocessed poses
+
         Shape:
             - poses: :math:`(L, 4, 4)` where :math:`L` denotes sequence length.
             - Output: :math:`(L, 4, 4)` where :math:`L` denotes sequence length.
@@ -473,9 +500,11 @@ class TUM(data.Dataset):
 
     def _homogenPoses(self, poses_point_quaternion):
         r"""Converts a list of 3D point unit quaternion poses to a list of homogeneous poses
+
         Args:
             poses_point_quaternion (list of np.ndarray): List of np.ndarray 3D point unit quaternion
                 poses, each of shape :math:`(7,)`.
+
         Returns:
             list of np.ndarray: List of homogeneous poses in np.ndarray format. Each np.ndarray
                 has a shape of :math:`(4, 4)`.
@@ -494,11 +523,13 @@ class TUM(data.Dataset):
     ):
         r"""Associates TUM color images, depth images and (optionally) poses based on un-synchronized time
         stamps and returns associations as tuples.
+
         Args:
             rgb_text_file (str): Path to "rgb.txt"
             depth_text_file (str): Path to "depth.txt"
             poses_text_file (str or None): Path to ground truth poses ("groundtruth.txt"). Default: None
             max_difference (float): Search radius for candidate generation. Default: 0.02
+
         Returns:
             associations (list of tuple): List of tuples, each tuple containing rgb frame path,
                 depth frame path, and an np.ndarray for 3D point unit quaternion poses of shape :math:`(7,)`
@@ -506,6 +537,7 @@ class TUM(data.Dataset):
             timestamps (list of tuple of str): Timestamps of matched rgb, depth and pose.
                 The first dimension corresponds to the number of matches :math:`N`, and the second dimension
                 stores the associated timestamps as (rgb_timestamp, depth_timestamp, pose_timestamp).
+
         """
         rgb_dict = tumutils.read_file_list(rgb_text_file, self.start, self.end)
         depth_dict = tumutils.read_file_list(depth_text_file)

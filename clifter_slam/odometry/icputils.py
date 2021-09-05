@@ -33,6 +33,7 @@ def solve_linear_system(
             :math:`\rho` to each diagonal element of the constraint matrix :math:`A`, so that the linear system
             becomes :math:`(A^TA + \rho I)x = b`, where :math:`I` is the identity matrix of shape
             :math:`(\text{num_of_variables}, \text{num_of_variables})`. Default: 1e-8
+
     Returns:
         torch.Tensor: Solution vector of the normal equations of the linear system
     Shape:
@@ -95,14 +96,17 @@ def gauss_newton_solve(
 ):
     r"""Computes Gauss Newton step by forming linear equation. Points from `src_pc` which have a distance greater
     than `dist_thresh` to the closest point in `tgt_pc` will be filtered.
+
     Args:
         src_pc (torch.Tensor): Source pointcloud (the pointcloud that needs warping).
         tgt_pc (torch.Tensor): Target pointcloud (the pointcloud to which the source pointcloud must be warped to).
         tgt_normals (torch.Tensor): Per-point normal vectors for each point in the target pointcloud.
         dist_thresh (float or int or None): Distance threshold for removing `src_pc` points distant from `tgt_pc`.
             Default: None
+
     Returns:
         tuple: tuple containing:
+
         - A (torch.Tensor): linear system equation
         - b (torch.Tensor): linear system residual
         - chamfer_indices (torch.Tensor): Index of the closest point in `tgt_pc` for each point in `src_pc`
@@ -248,9 +252,11 @@ def point_to_plane_ICP(
             Default: None
     Returns:
         tuple: tuple containing:
+
         - transform (torch.Tensor): linear system residual
         - chamfer_indices (torch.Tensor): Index of the closest point in `tgt_pc` for each point in `src_pc` that was not
           filtered out.
+
     Shape:
         - src_pc: :math:`(1, N_s, 3)`
         - tgt_pc: :math:`(1, N_t, 3)`
@@ -370,8 +376,10 @@ def point_to_plane_gradICP(
 ):
     r"""Computes a rigid transformation between `tgt_pc` (target pointcloud) and `src_pc` (source pointcloud) using a
     point-to-plane error metric and gradLM (:math:`\nabla LM`) solver (See gradLM section of 
-    `the clifter_slam paper <https://arxiv.org/abs/1910.10672>`__).  The iterate and damping coefficient are updated by:
+    `the clifter_slam paper <clifter_slampaper.pdf>`__).  The iterate and damping coefficient are updated by
+
     .. math::
+
         lambda_1 = Q_\lambda(r_0, r_1) & = \lambda_{min} + \frac{\lambda_{max} -
         \lambda_{min}}{1 + e^{-B (r_1 - r_0)}} \\
         Q_x(r_0, r_1) & = x_0 + \frac{\delta x_0}{\sqrt[nu]{1 + e^{-B2*(r_1 - r_0)}}}`
@@ -392,6 +400,7 @@ def point_to_plane_gradICP(
         nu (float or int): gradLM control parameter
     Returns:
         tuple: tuple containing:
+
         - transform (torch.Tensor): linear system residual
         - chamfer_indices (torch.Tensor): Index of the closest point in `tgt_pc` for each point in `src_pc` that was not
           filtered out.
@@ -539,6 +548,7 @@ def downsample_pointclouds(
         ds_ratio (int): Downsampling ratio
     Returns:
         clifter_slam.Pointclouds: Downsampled pointclouds
+
     Shape:
         - pc2im_bnhw: :math:`(\text{num_active_map_points}, 4)`
     """
@@ -602,6 +612,7 @@ def downsample_rgbdimages(rgbdimages: RGBDImages, ds_ratio: int) -> Pointclouds:
     Args:
         rgbdimages (clifter_slam.RGBDImages): RGBDImages to downsample
         ds_ratio (int): Downsampling ratio
+
     Returns:
         clifter_slam.Pointclouds: Downsampled points and normals
     """

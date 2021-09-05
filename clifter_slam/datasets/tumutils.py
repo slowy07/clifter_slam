@@ -35,9 +35,11 @@
 Slightly modified version of the "associate.py" and "evaluate_rpe.py" helper provided by TUM at: 
 https://svncvpr.in.tum.de/cvpr-ros-pkg/trunk/rgbd_benchmark/rgbd_benchmark_tools/src/rgbd_benchmark_tools/associate.py
 https://svncvpr.in.tum.de/cvpr-ros-pkg/trunk/rgbd_benchmark/rgbd_benchmark_tools/src/rgbd_benchmark_tools/evaluate_rpe.py
+
 The Kinect provides the color and depth images in an un-synchronized way. This means that the set of time stamps from
 the color images do not intersect with those of the depth images. Therefore, we need some way of associating color
 images to depth images.
+
 This script contains helpers for reading the time stamps from e.g. the "rgb.txt" file and the "depth.txt" file, 
 and joining them by finding the best matches.
 """
@@ -54,11 +56,14 @@ _EPS = np.finfo(float).eps * 4.0
 
 def transform44(l: tuple):
     r"""Generate a 4x4 homogeneous transformation matrix from a 3D point and unit quaternion.
+
     Args:
         l (tuple): tuple consisting of (stamp,tx,ty,tz,qx,qy,qz,qw) where (tx,ty,tz) is the
             3D position and (qx,qy,qz,qw) is the unit quaternion.
+
     Returns:
         np.ndarray: 4x4 homogeneous transformation matrix
+
     Shape:
         - Output: `(4, 4)`
     """
@@ -89,15 +94,18 @@ def transform44(l: tuple):
 
 def read_trajectory(filename: str, matrix: bool = True):
     r"""Read a trajectory from a text file.
+
     Args:
         filename: Path of file to be read
         matrix (np.ndarray or tuple): If True, will convert poses to 4x4 homogeneous transformation
             matrices (of type np.ndarray). Else, will return poses as tuples consisting of
             (stamp,tx,ty,tz,qx,qy,qz,qw), where (tx,ty,tz) is the 3D position and (qx,qy,qz,qw)
             is the unit quaternion.
+
     Returns:
         dict: dictionary of {stamp: pose} where stamp is of type str and pose is a 4x4 np.ndarray if matrix is True,
             or a tuple of position and unit quaternion (tx,ty,tz,qx,qy,qz,qw) if matrix is False.
+
     """
     file = open(filename)
     data = file.read()
@@ -141,14 +149,17 @@ def read_file_list(
     r"""Reads a sequence from a text file and returns a {stamp: [d1, d2, d3, ...]} dictionary. The file should
     be a .txt file where each line contains "stamp d1 d2 d3 ...", where "stamp" and "d1 d2 d3 ..." denote
     the time stamp and data respectively.
+
     Args:
         filename (str): Path to text file, where text file has the format: "stamp d1 d2 d3 ..."
         start (int or None): Index of frame to start stamp/data extraction from.
             If None, will start from the first frame. Default: None
         end (int or None): Index of frame to end stamp/data extraction at.
             If None, will end at the final frame. Default: None
+
     Returns:
         dict: dictionary of {stamp: [d1, d2, d3]} keys and values, where stamp is of type str
+
     """
     file = open(filename)
     data = file.read()
@@ -174,13 +185,16 @@ def associate(
     r"""Associate two dictionaries of {stamp1: data1} and {stamp2: data2} by returning
     (stamp1, stamp2). As the time stamps never match exactly, we aim to find the
     closest stamp match between input dictionaries.
+
     Args:
         first_dict (dict): First dictionary of {stamp1: data1} where stamp1 is of type str
         second_dict (dict): Second dictionary of {stamp2: data2} where stamp2 is of type str
         offset (float): Time offset between both dictionaries (e.g., to model the delay between the sensors)
         max_difference (float): Search radius for candidate generation
+
     Returns:
         matches (list of tuple of str): List of matched tuples (stamp1, stamp2)
+
     """
     first_keys = list(first_dict.keys())
     second_keys = list(second_dict.keys())

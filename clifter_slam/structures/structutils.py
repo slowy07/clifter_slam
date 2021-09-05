@@ -52,12 +52,14 @@ def list_to_padded(
 ) -> torch.Tensor:
     r"""Transforms a list of B tensors each of shape :math:`(N_b, C_b)` into a single tensor of shape
     :math:`(N, pad_size(0), pad_size(1))`, or :math:`(N, max(N_b), max(C_b))` if pad_size is None.
+
     Args:
         x: list of Tensors
         pad_size: list(int) specifying the size of the padded tensor
         pad_value: float value to be used to fill the padded tensor
         equisized: bool indicating whether the items in x are of equal size
         (sometimes this is known and if provided saves computation)
+
     Returns:
         x_padded: tensor consisting of padded input tensors
     """
@@ -88,11 +90,14 @@ def padded_to_list(x: torch.Tensor, split_size: Union[list, tuple, None] = None)
     r"""Transforms a padded tensor of shape :math:`(B, N, C)` into a list of :math:`B` tensors of shape
     :math:`(N_b, C_b)` where :math:`(N_b, C_b)` is specified in split_size(b), or of shape :math:`(N, C)` if
     split_size is None. split_size support only for 3-dimensional input tensor.
+
     Args:
         x: tensor consisting of padded input tensors
         split_size: the shape of the final tensor to be returned (of length N).
+
     Returns:
         x_list: list of Tensors
+
     Shape:
         - x: :math:`(B, N, C)`
     """
@@ -121,12 +126,14 @@ def padded_to_list(x: torch.Tensor, split_size: Union[list, tuple, None] = None)
 
 def numpy_to_plotly_image(img, name=None, is_depth=False, scale=None, quality=95):
     r"""Converts a numpy array img to a `plotly.graph_objects.Image` object.
+
     Args
         img (np.ndarray): RGB image array
         name (str): Name for the returned `plotly.graph_objects.Image` object
         is_depth (bool): Bool indicating whether input `img` is depth image. Default: False
         scale (int or None): Scale factor to display on hover. If None, will not display `scale: ...`. Default: None
         quality (int): Image quality from 0 to 100 (the higher is the better). Default: 95
+
     Returns:
         `plotly.graph_objects.Image`
     """
@@ -148,9 +155,11 @@ def numpy_to_plotly_image(img, name=None, is_depth=False, scale=None, quality=95
 
 def img_to_b64str(img, quality=95):
     r"""Converts a numpy array of uint8 into a base64 jpeg string.
+
     Args
         img (np.ndarray): RGB or greyscale image array
         quality (int): Image quality from 0 to 100 (the higher is the better). Default: 95
+
     Returns:
         str: base64 jpeg string
     """

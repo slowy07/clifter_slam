@@ -12,8 +12,10 @@ __all__ = ["Pointclouds"]
 
 class Pointclouds(object):
     r"""Batch of pointclouds (with varying numbers of points), enabling conversion between 2 representations:
+
     - List: Store points of each pointcloud of shape :math:`(N_b, 3)` in a list of length :math:`B`.
     - Padded: Store all points in a :math:`(B, max(N_b), 3)` tensor with zero padding as required.
+
     Args:
         points (torch.Tensor or list of torch.Tensor or None): :math:`(X, Y, Z)` coordinates of each point.
             Default: None
@@ -25,6 +27,7 @@ class Pointclouds(object):
             Default: None
         device (torch.device or str or None): The desired device of internal tensors. If None, sets device to be
             same as `points` device. Default: None
+
     Shape:
         - points: Can either be a list of tensors of shape :math:`(N_b, 3)` or a padded tensor of shape
           :math:`(B, N, 3)`.
@@ -34,7 +37,9 @@ class Pointclouds(object):
           :math:`(B, N, 3)`.
         - features: Can either be a list of tensors of shape :math:`(N_b, C)` or a padded tensor of shape
           :math:`(B, N, C)`.
+
     Examples::
+
         >>> points_list = [torch.rand(1, 3), torch.rand(4, 3)]
         >>> pcs1 = clifter_slam.Pointclouds(points_list)
         >>> print(pcs1.points_padded.shape)
@@ -239,6 +244,7 @@ class Pointclouds(object):
         Args:
             index (int or slice or list of int or torch.Tensor): Specifying the index of the pointclouds to retrieve.
                 Can be an int, slice, list of ints or a boolean tensor.
+
         Returns:
             clifter_slam.Pointclouds: Selected pointclouds. The pointclouds tensors are not cloned.
         """
@@ -302,8 +308,10 @@ class Pointclouds(object):
 
     def __sub__(self, other):
         r"""Subtracts `other` from all Pointclouds' points (`Pointclouds` - `other`).
+
         Args:
             other (torch.Tensor or float or int): Value(s) to subtract from all points.
+
         returns:
             clifter_slam.Pointclouds: Subtracted Pointclouds
         """
@@ -325,10 +333,13 @@ class Pointclouds(object):
 
     def __truediv__(self, other):
         r"""Divides all Pointclouds' points by `other`.
+
         Args:
             other (torch.Tensor or float or int): Value(s) to divide all points by.
+
         Returns:
             self
+
         Shape:
             - other: Any. Must be compatible with :math:`(B, N, 3)`.
         """
@@ -342,10 +353,13 @@ class Pointclouds(object):
     def __matmul__(self, other):
         r"""Post-multiplication :math:`SE(3)` transformation or :math:`SO(3)` rotation of Pointclouds' points and
         normals.
+
         Args:
             other (torch.Tensor): Either :math:`SE(3)` transformation or :math:`SO(3)` rotation
+
         Returns:
             self
+
         Shape:
             - other: Either :math:`SE(3)` transformation of shape :math:`(4, 4)` or :math:`(B, 4, 4)`, or :math:`SO(3)`
                 rotation of shape :math:`(3, 3)` or :math:`(B, 3, 3)`
@@ -384,10 +398,13 @@ class Pointclouds(object):
 
     def offset_(self, offset: Union[torch.Tensor, float, int]):
         r"""Adds :math:`offset` to all Pointclouds' points. In place operation.
+
         Args:
             offset (torch.Tensor or float or int): Value(s) to add to all points.
+
         Returns:
             self
+
         Shape:
             - offset: Any. Must be compatible with :math:`(B, N, 3)`.
         """
@@ -414,10 +431,13 @@ class Pointclouds(object):
 
     def scale_(self, scale: Union[torch.Tensor, float, int]):
         r"""Scales all Pointclouds' points by `scale`. In place operation.
+
         Args:
             scale (torch.Tensor or float or int): Value(s) to scale all points by.
+
         Returns:
             self
+
         Shape:
             - scale: Any. Must be compatible with :math:`(B, N, 3)`.
         """
@@ -445,12 +465,15 @@ class Pointclouds(object):
 
     def rotate_(self, rmat: torch.Tensor, *, pre_multiplication=True):
         r"""Applies batch or single :math:`SO(3)` rotation to all Pointclouds' points and normals. In place operation.
+
         Args:
             rmat (torch.Tensor): Either batch or single :math:`SO(3)` rotation matrix
             pre_multiplication (torch.Tensor): If True, will pre-multiply the rotation. Otherwise will
                 post-multiply the rotation. Default: True
+
         Returns:
             self
+
         Shape:
             - rmat: :math:`(3, 3)` or :math:`(B, 3, 3)`
         """
@@ -503,12 +526,15 @@ class Pointclouds(object):
     def transform_(self, transform: torch.Tensor, *, pre_multiplication=True):
         r"""Applies batch or single :math:`SE(3)` transformation to all Pointclouds' points and normals. In place
         operation.
+
         Args:
             transform (torch.Tensor): Either batch or single :math:`SE(3)` transformation tensor
             pre_multiplication (torch.Tensor): If True, will pre-multiply the transformation. Otherwise will
                 post-multiply the transformation. Default: True
+
         Returns:
             self
+
         Shape:
             - transform: :math:`(4, 4)` or :math:`(B, 4, 4)`
         """
@@ -549,10 +575,13 @@ class Pointclouds(object):
     def pinhole_projection_(self, intrinsics: torch.Tensor):
         r"""Projects Pointclouds' points onto :math:`z=1` plane using intrinsics of a pinhole camera. In place
         operation.
+
         Args:
             intrinsics (torch.Tensor): Either batch or single intrinsics matrix
+
         Returns:
             self
+
         Shape:
             - intrinsics: :math:`(4, 4)` or :math:`(B, 4, 4)`
         """
@@ -587,6 +616,7 @@ class Pointclouds(object):
     @property
     def has_points(self):
         r"""Determines whether pointclouds have points or not
+
         Returns:
             bool
         """
@@ -599,6 +629,7 @@ class Pointclouds(object):
     @property
     def has_normals(self):
         r"""Determines whether pointclouds have normals or not
+
         Returns:
             bool
         """
@@ -611,6 +642,7 @@ class Pointclouds(object):
     @property
     def has_colors(self):
         r"""Determines whether pointclouds have colors or not
+
         Returns:
             bool
         """
@@ -623,6 +655,7 @@ class Pointclouds(object):
     @property
     def has_features(self):
         r"""Determines whether pointclouds have features or not
+
         Returns:
             bool
         """
@@ -635,6 +668,7 @@ class Pointclouds(object):
     @property
     def num_features(self):
         r"""Determines number of features in pointclouds
+
         Returns:
             int
         """
@@ -648,6 +682,7 @@ class Pointclouds(object):
     @property
     def points_list(self):
         r"""Gets the list representation of the points.
+
         Returns:
             list of torch.Tensor: list of :math:`B` tensors of points of shape :math:`(N_b, 3)`.
         """
@@ -661,6 +696,7 @@ class Pointclouds(object):
     @property
     def normals_list(self):
         r"""Gets the list representation of the point normals.
+
         Returns:
             list of torch.Tensor: list of :math:`B` tensors of normals of shape :math:`(N_b, 3)`.
         """
@@ -674,6 +710,7 @@ class Pointclouds(object):
     @property
     def colors_list(self):
         r"""Gets the list representation of the point colors.
+
         Returns:
             list of torch.Tensor: list of :math:`B` tensors of colors of shape :math:`(N_b, 3)`.
         """
@@ -687,6 +724,7 @@ class Pointclouds(object):
     @property
     def features_list(self):
         r"""Gets the list representation of the point features.
+
         Returns:
             list of torch.Tensor: list of :math:`B` tensors of features of shape :math:`(N_b, 3)`.
         """
@@ -700,8 +738,10 @@ class Pointclouds(object):
     @property
     def points_padded(self):
         r"""Gets the padded representation of the points.
+
         Returns:
             torch.Tensor: tensor representation of points with zero padding as required
+
         Shape:
             - Output: :math:`(B, max(N_b), 3)`
         """
@@ -711,8 +751,10 @@ class Pointclouds(object):
     @property
     def normals_padded(self):
         r"""Gets the padded representation of the normals.
+
         Returns:
             torch.Tensor: tensor representation of normals with zero padding as required
+
         Shape:
             - Output: :math:`(B, max(N_b), 3)`
         """
@@ -722,8 +764,10 @@ class Pointclouds(object):
     @property
     def colors_padded(self):
         r"""Gets the padded representation of the colors.
+
         Returns:
             torch.Tensor: tensor representation of colors with zero padding as required
+
         Shape:
             - Output: :math:`(B, max(N_b), 3)`
         """
@@ -733,8 +777,10 @@ class Pointclouds(object):
     @property
     def features_padded(self):
         r"""Gets the padded representation of the features.
+
         Returns:
             torch.Tensor: tensor representation of features with zero padding as required
+
         Shape:
             - Output: :math:`(B, max(N_b), C)`
         """
@@ -744,8 +790,10 @@ class Pointclouds(object):
     @property
     def nonpad_mask(self):
         r"""Returns tensor of `bool` values which are True wherever points exist and False wherever there is padding.
+
         Returns:
             torch.Tensor: 2d `bool` mask
+
         Shape:
             - Output: :math:`(B, N)`
         """
@@ -764,8 +812,10 @@ class Pointclouds(object):
     def num_points_per_pointcloud(self):
         r"""Returns a 1D tensor with length equal to the number of pointclouds giving the number of points in each
         pointcloud.
+
         Returns:
             torch.Tensor: 1D tensor of sizes
+
         Shape:
             - Output: tensor of shape :math:`(B)`.
         """
@@ -775,9 +825,11 @@ class Pointclouds(object):
     def points_list(self, value: List[torch.Tensor]):
         r"""Updates `points_list` representation.
         .. note:: The number of pointclouds and the number of points per pointcloud can not change.
+
         Args:
             value (list of torch.Tensor): list of :math:`B` tensors of points of shape :math:`(N_b, 3)`.
                 Shape of tensors in `value` and `pointclouds.points_list` must match.
+
         """
         self._assert_set_list(value)
         self._points_list = [v.clone().to(self.device) for v in value]
@@ -787,9 +839,11 @@ class Pointclouds(object):
     def normals_list(self, value: List[torch.Tensor]):
         r"""Updates `normals_list` representation.
         .. note:: The number of pointclouds and the number of points per pointcloud can not change.
+
         Args:
             value (list of torch.Tensor): list of :math:`B` tensors of points of shape :math:`(N_b, 3)`.
                 Shape of tensors in `value` and `pointclouds.points_list` must match.
+
         """
         self._assert_set_list(value)
         self._normals_list = [v.clone().to(self.device) for v in value]
@@ -799,9 +853,11 @@ class Pointclouds(object):
     def colors_list(self, value: List[torch.Tensor]):
         r"""Updates `colors_list` representation.
         .. note:: The number of pointclouds and the number of points per pointcloud can not change.
+
         Args:
             value (list of torch.Tensor): list of :math:`B` tensors of points of shape :math:`(N_b, 3)`.
                 Shape of tensors in `value` and `pointclouds.points_list` must match.
+
         """
         self._assert_set_list(value)
         self._colors_list = [v.clone().to(self.device) for v in value]
@@ -811,9 +867,11 @@ class Pointclouds(object):
     def features_list(self, value: List[torch.Tensor]):
         r"""Updates `features_list` representation.
         .. note:: The number of pointclouds and the number of points per pointcloud can not change.
+
         Args:
             value (list of torch.Tensor): list of :math:`B` tensors of points of shape :math:`(N_b, C)`.
                 Shape of tensors in `value` and `pointclouds.points_list` must match.
+
         """
         self._assert_set_list(value, first_dim_only=True)
         self._features_list = [v.clone().to(self.device) for v in value]
@@ -824,9 +882,11 @@ class Pointclouds(object):
         r"""Updates `points_padded` representation.
         .. note:: The number of pointclouds and the number of points per pointcloud can not change
             (can not change the shape or padding of `points_padded`).
+
         Args:
             value (torch.Tensor): tensor representation of (zero padded) points with the same shape and number of
                 points per pointcloud as `self.points_padded`
+
         Shape:
             - value: :math:`(B, max(N_b), 3)`
         """
@@ -839,9 +899,11 @@ class Pointclouds(object):
         r"""Updates `normals_padded` representation.
         .. note:: The number of pointclouds and the number of points per pointcloud can not change
             (can not change the shape or padding of `normals_padded`).
+
         Args:
             value (torch.Tensor): tensor representation of (zero padded) normals with the same shape and number of
                 points per pointcloud as `self.points_padded`
+
         Shape:
             - value: :math:`(B, max(N_b), 3)`
         """
@@ -854,9 +916,11 @@ class Pointclouds(object):
         r"""Updates `colors_padded` representation.
         .. note:: The number of pointclouds and the number of points per pointcloud can not change
             (can not change the shape or padding of `colors_padded`).
+
         Args:
             value (torch.Tensor): tensor representation of (zero padded) colors with the same shape and number of
                 points per pointcloud as `self.points_padded`
+
         Shape:
             - value: :math:`(B, max(N_b), 3)`
         """
@@ -869,9 +933,11 @@ class Pointclouds(object):
         r"""Updates `features_padded` representation.
         .. note:: The number of pointclouds and the number of points per pointcloud can not change
             (can not change the shape or padding of `features_padded`).
+
         Args:
             value (torch.Tensor): tensor representation of (zero padded) features with the same shape and number of
                 points per pointcloud as `self.points_padded`
+
         Shape:
             - value: :math:`(B, max(N_b), C)`
         """
@@ -881,6 +947,7 @@ class Pointclouds(object):
 
     def _compute_padded(self, refresh: bool = False):
         r"""Computes the padded version of pointclouds.
+
         Args:
             refresh (bool): If True, will recompute padded representation even if it already exists
         """
@@ -929,6 +996,7 @@ class Pointclouds(object):
 
     def clone(self):
         r"""Returns deep copy of Pointclouds object. All internal tensors are cloned individually.
+
         Returns:
             clifter_slam.Pointclouds: cloned clifter_slam.Pointclouds object
         """
@@ -977,6 +1045,7 @@ class Pointclouds(object):
 
     def detach(self):
         r"""Detachs Pointclouds object. All internal tensors are detached individually.
+
         Returns:
             clifter_slam.Pointclouds: detached clifter_slam.Pointclouds object
         """
@@ -1000,9 +1069,11 @@ class Pointclouds(object):
         If copy = True or the self Tensor is on a different device, the returned tensor is a copy of self with the
         desired torch.device.
         If copy = False and the self Tensor already has the correct torch.device, then self is returned.
+
         Args:
             device (torch.device or str): Device id for the new tensor.
             copy (bool): Boolean indicator whether or not to clone self. Default False.
+
         Returns:
             clifter_slam.Pointclouds
         """
@@ -1029,6 +1100,7 @@ class Pointclouds(object):
 
     def cpu(self):
         r"""Match functionality of torch.Tensor.cpu()
+
         Returns:
             clifter_slam.Pointclouds
         """
@@ -1036,6 +1108,7 @@ class Pointclouds(object):
 
     def cuda(self):
         r"""Match functionality of torch.Tensor.cuda()
+
         Returns:
             clifter_slam.Pointclouds
         """
@@ -1044,8 +1117,10 @@ class Pointclouds(object):
     def append_points(self, pointclouds: "Pointclouds"):
         r"""Appends points, normals, colors and features of a clifter_slam.Pointclouds object to the current pointclouds.
         Both Pointclouds must have/not have the same attributes. In place operation.
+
         Args:
             pointclouds (clifter_slam.Pointclouds): Pointclouds to get appended to self. Must have same batch size as self.
+
         Returns:
             self
         """
@@ -1169,6 +1244,7 @@ class Pointclouds(object):
         include_normals: bool = False,
     ):
         r"""Converts `index`-th pointcloud to a `open3d.geometry.Pointcloud` object (e.g. for visualization).
+
         Args:
             index (int): Index of which pointcloud (from the batch of pointclouds) to convert to
                 `open3d.geometry.Pointcloud`.
@@ -1178,6 +1254,7 @@ class Pointclouds(object):
                 will not set a max size (will not downsample). Default: None
             include_normals (bool): If True, will include normal vectors in the `o3d.geometry.Pointcloud`
                 objects. Default: False
+
         Returns:
             pcd (open3d.geometry.Pointcloud): `open3d.geometry.Pointcloud` object from `index`-th pointcloud.
         """
@@ -1226,6 +1303,7 @@ class Pointclouds(object):
     ):
         r"""Converts `index`-th pointcloud to either a `plotly.graph_objects.Figure` or a
         `plotly.graph_objects.Scatter3d` object (for visualization).
+
         Args:
             index (int): Index of which pointcloud (from the batch of pointclouds) to convert to plotly
                 representation.
@@ -1236,6 +1314,7 @@ class Pointclouds(object):
                 be visualized by calling `.show()` on. Otherwise, returns a
                 `plotly.graph_objects.Scatter3d` object. Default: True
             point_size (int): Point size radius (for visualization). Default: 2
+
         Returns:
             plotly.graph_objects.Figure or plotly.graph_objects.Scatter3d: If `as_figure` is True, will return
             `plotly.graph_objects.Figure` object from the `index`-th pointcloud. Else,
@@ -1305,6 +1384,7 @@ class Pointclouds(object):
 
     def _assert_set_padded(self, value: torch.Tensor, first_2_dims_only: bool = False):
         r"""Checks if value can be set as a padded representation attribute
+
         Args:
             value (torch.Tensor): value we want to set as one of the padded representation attributes
             first_2_dims_only (bool): If True, will only check if first 2 dimensions of value are the same as
@@ -1348,6 +1428,7 @@ class Pointclouds(object):
 
     def _assert_set_list(self, value: List[torch.Tensor], first_dim_only: bool = False):
         r"""Checks if value can be set as a list representation attribute
+
         Args:
             value (list of torch.Tensor): value we want to set as one of the list representation attributes
             first_dim_only (bool): If True, will only check if first dimension of value is the same as

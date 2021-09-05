@@ -5,6 +5,7 @@ __all__ = ["OdometryProvider"]
 
 class OdometryProvider(ABC):
     r"""Base class for all odometry providers.
+
     Your providers should also subclass this class. You should override the `provide()` method.
     """
 

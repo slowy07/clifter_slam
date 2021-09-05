@@ -10,13 +10,15 @@ def pointclouds_from_rgbdimages(
     global_coordinates: bool = True,
     filter_missing_depths: bool = True,
 ) -> Pointclouds:
-    r"""Converts .RGBDImages containing batch of RGB-D images with sequence length of 1 to clifter_slam.Pointclouds
+    r"""Converts clifter_slam.RGBDImages containing batch of RGB-D images with sequence length of 1 to clifter_slam.Pointclouds
+
     Args:
         rgbdimages (clifter_slam.RGBDImages): Can contain a batch of RGB-D images but must have sequence length of 1.
         global_coordinates (bool): If True, will create pointclouds object based on :math:`(X, Y, Z)` coordinates
             in the global coordinates (based on `rgbdimages.poses`). Otherwise, will use the local frame coordinates.
         filter_missing_depths (bool): If True, will not include vertices corresponding to missing depth values
             in the output pointclouds.
+
     Returns:
         clifter_slam.Pointclouds: Output pointclouds
     """

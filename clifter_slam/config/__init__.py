@@ -1,1 +1,1 @@
-from cfgnode import *
+from .cfgnode import *
