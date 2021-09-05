@@ -6,4 +6,4 @@ clifter slam is a fully differentiable dense SLAM framework. It provides a repos
 
 ## tutorials
 - [getting started with pointclouds](documentation/Pointclouds.md)
-- [getting started with RGBDImages](documentations/RGBDImages.md)
+- [getting started with RGBDImages](documentation/RGBDImages.md)
