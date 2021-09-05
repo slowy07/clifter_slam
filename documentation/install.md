@@ -1,13 +1,9 @@
-# installation
+# clifter slam
 
-## torch install
-to install PyTorch via pip , and do have a [CUDA-Capable](https://developer.nvidia.com/cuda-zone) system, in the above selector, choose os : ``linux``, package: ``pip`` and the CUDA version suited to your machine. the latest CUDA version is better. Then run the command that is presented to you
+clifter_slam is an open-source library aimed at providing implementation of SLAM subsystem for deeplearning (DL) practioners. While several DL practitioners want to use SLAM from the comfort of theri favorite DL library (TensorFlow / Pytorch), there are currentyl no freely available implementations.We aim to fill in that gap with this library
 
-## verification
-to ensure that PyTorch was installed correctly, we can verify by running sample PyTorch code.
+Another underlying motivation is to release code for the clifter_slam paper, where we demonstrate end-to-end differentiable dense SLAM systems. People should be able to load up their favorite datasets and run differentiable / no-differentiable dense SLAM system on them
 
-```python
-import torch
-a = torch.rand(5,3)
-print(a)
-```
+## tutorials
+- [getting started with RGDBImages](RGBDImages.md)
+- [getting started with Pointclouds](Pointclouds.md)
