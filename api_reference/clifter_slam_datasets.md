@@ -78,3 +78,14 @@ with parameters
 
     number of frames between the first frames of two consecutive extracted sequences. see aboce example if unsure. if ``None``, will set ``stride = seqlen * (dilation + 1)`` (non-overlapping sequences). default ``None``
 
+- start(``int`` or ``None``)
+
+    index of the frame from which to start extracting sequences for every trajectory. if ``None``, will start from the first frame. Default ``None``
+
+- end(``int``)
+
+    index of the frame at which to stop extracting sequences fro every trajectory. if ``None``, will continue extracting frames until the end of the trajectory. Default ``None``
+
+- height(``int``)
+
+    spatial height to resize frames to. Default ``480``
