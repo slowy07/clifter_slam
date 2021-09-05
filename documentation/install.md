@@ -5,5 +5,5 @@ clifter_slam is an open-source library aimed at providing implementation of SLAM
 Another underlying motivation is to release code for the clifter_slam paper, where we demonstrate end-to-end differentiable dense SLAM systems. People should be able to load up their favorite datasets and run differentiable / no-differentiable dense SLAM system on them
 
 ## tutorials
-- [getting started with RGDBImages](RGBDImages.md)
-- [getting started with Pointclouds](Pointclouds.md)
+- [getting started with RGDBImages](documentation/RGBDImages.md)
+- [getting started with Pointclouds](documentation/Pointclouds.md)
