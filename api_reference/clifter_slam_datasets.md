@@ -455,3 +455,45 @@ parameters
 
     - pointquaternions (*, 7)
     - output (*, 4, 4)
+
+```python
+poses_to_transforms(
+    poses: Union[numpy.ndarray],
+    List[numpy.ndarray]
+)
+```
+parameters
+
+- poses(``nump.ndarray`` or ``list`` of ``numpy.ndarray``)
+
+    sequence of poses in ``numpy.ndarray`` format
+
+return
+
+- sequence of frame to frame transformations where initial
+
+    frame is transformed to have identity pose
+    type: ``numpy.ndarray``
+
+```python
+create_label_image(
+    prediction: numpy.ndarray,
+    color_palette: collections.OrderedDict
+)
+```
+
+creates a label image, given a network prediction (each pixel contains class index) and a color pallete
+
+parameters
+
+- prediction(``numpy.ndarray``)
+
+    predicted image where each pixel contains an integer, corresponding to its class label
+
+- color_pallete(``OrderedDict``)
+
+    contains RGB colors (uint8) for each class
+
+returns
+
+label image wiht the given color pallete
