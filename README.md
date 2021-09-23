@@ -19,4 +19,5 @@ clifter slam is a fully differentiable dense SLAM framework. It provides a repos
 - [``clifter_slam.datasets``](api_reference/clifter_slam_datasets.md)
 - [``clifter_slam.geometry``](api_reference/clifter_slam_geometry.md)
 - [``clifter_slam.odometry``](api_reference/clifter_slam_odometry.md)
+- [``clifter_slam.slam``](api_reference/clifter_slam_slam.md)
 
