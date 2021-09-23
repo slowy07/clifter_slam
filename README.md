@@ -4,7 +4,7 @@ clifter slam is a fully differentiable dense SLAM framework. It provides a repos
 [repository](https://github.com/slowy07/clifter_slam)
 
 ## demo testing
-- [pointcloud_clifter_slam](https://colab.research.google.com/drive/1QQQQ7XDop8JLL7uMeZ3FSCy6OhNk7CW0)
+- [pointcloud_clifter_slam](https://colab.research.google.com/drive/1QQQQ7XDop8JLL7uMeZ3FSCy6OhNk7CW0?usp=sharing)
 
 ## documentation
 [documentation](documentation/install.md)
