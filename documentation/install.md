@@ -27,9 +27,8 @@ for each of these functions, we uniformly sampel the paramters __p__ = {a, t, w}
 clifter_slam works out of the box on multiple other RGB-D datasets,speciafically, we present qualitative result of running or differentiable SLAM system on RGB-D sequences frin TUM RGB-D dataset, ScanNet as well as on an in-house sequence captured from an Intel Real Sense camera
 
 
-+------------------------------------+----------+--------+
 |               method               |   ATE    |  RPE   |
-+------------------------------------+----------+--------+
+|:---                                |--------- |     --:|
 | ICP-Odometry (non-differentiable)  |   0.029  | 0.0318 |
 | ICP-Odometry                       | 0.01664  | 0.0237 |
 | ICP-SLAM (non-differentiable)      |  0.0282  | 0.0294 |
@@ -40,7 +39,7 @@ clifter_slam works out of the box on multiple other RGB-D datasets,speciafically
 | KinectFusion                       |   0.016  |  0.021 |
 | KinectFusion (non-differentiable)  |   0.013  |  0.019 |
 | KinectFusion                       |   0.016  |  0.021 |
-+------------------------------------+----------+--------+
+
 
 ## conclusion
 a differentiable computational graph framwework that enables gradient-based learning for a lager set of localization and mapping based task, by providing explicit gradients with respect to the input image and dpeth maps. we demonstrate a diverse set of case studioes and showcase how the gradients propogate throughout the tracking, mapping, and fusion stages. future efforts will enable clifter_slam to be directly plugged into and optimized in conjuction with downstream task. clifter_slam can also enable a variety of sel-supervised learning applications, as any gradient-based learning architecture can now be equipped with a sense of __spatial understanding__
